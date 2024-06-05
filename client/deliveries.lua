@@ -195,7 +195,7 @@ local function RequestDelivery()
         QBCore.Functions.Notify(Lang:t('info.sending_delivery_email'), 'success')
         TriggerServerEvent('qb-drugs:server:giveDeliveryItems', waitingDelivery)
         SetTimeout(2000, function()
-            TriggerServerEvent('qb-phone:server:sendNewMail', {
+            TriggerServerEvent('phone:sendNewMail', {
                 sender = Config.Dealers[currentDealer]['name'],
                 subject = 'Delivery Location',
                 message = Lang:t('info.delivery_info_email', { itemAmount = amount, itemLabel = QBCore.Shared.Items[waitingDelivery['itemData']['item']]['label'] }),
