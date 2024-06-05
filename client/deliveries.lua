@@ -113,6 +113,28 @@ end
 
 local function RequestDelivery()
     if not waitingDelivery then
+        local emailResult = lib.callback.await('qb-drugs:server:CreatedEmail', false)
+        if emailResult == 0 then
+            lib.notify({
+                id = 'phone_not_setup',
+                title = 'Your phone is not set up',
+                description = 'You need to set up your phone and create an email address to do a delivery mission.',
+                position = 'center-right',
+                type = 'error',
+                duration = 7000,
+            })
+            return
+        elseif emailResult == 1 then
+            lib.notify({
+                id = 'email_not_setup',
+                title = 'Your email is not set up',
+                description = 'Create an email address on your phone to accept this delivery mission.',
+                position = 'center-right',
+                type = 'error',
+                duration = 7000,
+            })
+            return
+        end
         GetClosestDealer()
 
         local amount = math.random(1, 3)

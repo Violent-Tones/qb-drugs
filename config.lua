@@ -29,6 +29,13 @@ Config = {
         --        },
         --    },
         --},
+        ['Rancho Dealer'] = {
+            time = {min = 5, max = 23},
+            name = "Dimebag Danny",
+            coords = {x = 362.18, y = -2029.42, z = 22.4},
+            products = {
+            },
+       },
     },
     UseTarget = GetConvar('UseTarget', 'false') == 'true', -- Use qb-target interactions (don't change this, go to your server.cfg and add setr UseTarget true)
     PoliceCallChance = 99,                                 --in percentage (if 99, theres the 99% to call the police)
@@ -134,41 +141,41 @@ Config = {
     MinimumDrugSalePolice = 0,
 
     DrugsPrice = {
+        ['weed_skunk'] = {
+            min = 5,
+            max = 10,
+        },
         ['weed_whitewidow'] = {
-            min = 15,
-            max = 24,
+            min = 10,
+            max = 25,
         },
         ['weed_ogkush'] = {
             min = 15,
-            max = 28,
-        },
-        ['weed_skunk'] = {
-            min = 15,
-            max = 31,
-        },
-        ['weed_amnesia'] = {
-            min = 18,
-            max = 34,
+            max = 40,
         },
         ['weed_purplehaze'] = {
             min = 18,
-            max = 37,
+            max = 50,
+        },
+        ['weed_amnesia'] = {
+            min = 40,
+            max = 60,
         },
         ['weed_ak47'] = {
-            min = 18,
-            max = 40,
+            min = 60,
+            max = 100,
         },
         ['crack_baggy'] = {
-            min = 18,
-            max = 34,
+            min = 70,
+            max = 120,
         },
         ['cokebaggy'] = {
-            min = 18,
-            max = 37,
+            min = 80,
+            max = 150,
         },
         ['meth'] = {
-            min = 18,
-            max = 40,
+            min = 150,
+            max = 200,
         },
     },
 
@@ -213,6 +220,10 @@ Config = {
         [5] = {
             ['label'] = 'Bahama Mamas',
             ['coords'] = vector3(-1383.1, -639.99, 28.67),
+        },
+        [6] = {
+            ['label'] = 'Grapeseed Gas Station',
+            ['coords'] = vector3(1702.58, 4916.34, 42.08),
         },
     },
 }

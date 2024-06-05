@@ -9,7 +9,8 @@ shared_scripts {
     'config.lua',
     '@qb-core/shared/locale.lua',
     'locales/en.lua',
-    'locales/*.lua'
+    'locales/*.lua',
+    '@ox_lib/init.lua',
 }
 
 client_scripts {
@@ -17,11 +18,13 @@ client_scripts {
     '@PolyZone/BoxZone.lua',
     '@PolyZone/ComboZone.lua',
     'client/deliveries.lua',
-    'client/cornerselling.lua'
+    'client/cornerselling.lua',
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/deliveries.lua',
-    'server/cornerselling.lua'
+    'server/cornerselling.lua',
+    'server/hooks.lua',
+    'server/callbacks.lua',
 }
