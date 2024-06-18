@@ -1,3 +1,5 @@
+QBCore = exports['qb-core']:GetCoreObject()
+
 local options = {
     print = false,
     inventoryFilter = {
@@ -10,12 +12,12 @@ exports.ox_inventory:registerHook('buyItem', function(payload)
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return false end
 
-    local currentRep = Player.PlayerData.metadata['dealerrep']
-    local minRep = payload.metadata['minrep']
-    if currentRep < minRep then
+    local curRep = Player.Functions.GetRep('dealer')
+    local minRep = payload.fromSlot.metadata['minrep']
+    if curRep < minRep then
         TriggerClientEvent('ox_lib:notify', src, {
-            title = minRep .. ' rep needed to buy this!.',
-            description = 'You currently have ' .. currentRep .. ' rep with the dealer.',
+            title = minRep .. ' rep needed to buy this!',
+            description = 'You currently have ' .. curRep .. ' rep with the dealer.',
             position = 'center-right',
             type = 'error',
             duration = 5000,

@@ -19,6 +19,7 @@ client_scripts {
     '@PolyZone/ComboZone.lua',
     'client/deliveries.lua',
     'client/cornerselling.lua',
+    'client/destination.lua',
 }
 
 server_scripts {
@@ -28,3 +29,5 @@ server_scripts {
     'server/hooks.lua',
     'server/callbacks.lua',
 }
+
+dependency 'violent-utils'

@@ -1,4 +1,6 @@
 QBCore = exports['qb-core']:GetCoreObject()
+Utils = exports['violent-utils']:GetCoreObject()
+
 local currentDealer = nil
 local dealerIsHome = false
 local waitingDelivery = nil
@@ -111,30 +113,38 @@ local function RandomDeliveryItemOnRep()
     return availableItems[math.random(1, #availableItems)]
 end
 
+local function CheckPhoneEmailCreated()
+    local emailResult = lib.callback.await('qb-drugs:server:CreatedEmail')
+    if emailResult == 0 then
+        lib.notify({
+            id = 'phone_not_setup',
+            title = 'Check your phone',
+            description = 'Make sure you have your phone in your pocket before starting a mission.',
+            position = 'center-right',
+            type = 'warning',
+            duration = 8000,
+        })
+        return false
+    elseif emailResult == 1 then
+        lib.notify({
+            id = 'email_not_setup',
+            title = 'Your email is not set up',
+            description = 'Create an email address on your phone to accept this delivery mission.',
+            position = 'center-right',
+            type = 'error',
+            duration = 7000,
+        })
+        return false
+    else
+        return true
+    end
+end
+
 local function RequestDelivery()
+    if not CheckPhoneEmailCreated() then
+        return
+    end
     if not waitingDelivery then
-        local emailResult = lib.callback.await('qb-drugs:server:CreatedEmail', false)
-        if emailResult == 0 then
-            lib.notify({
-                id = 'phone_not_setup',
-                title = 'Your phone is not set up',
-                description = 'You need to set up your phone and create an email address to do a delivery mission.',
-                position = 'center-right',
-                type = 'error',
-                duration = 7000,
-            })
-            return
-        elseif emailResult == 1 then
-            lib.notify({
-                id = 'email_not_setup',
-                title = 'Your email is not set up',
-                description = 'Create an email address on your phone to accept this delivery mission.',
-                position = 'center-right',
-                type = 'error',
-                duration = 7000,
-            })
-            return
-        end
         GetClosestDealer()
 
         local amount = math.random(1, 3)
@@ -246,11 +256,13 @@ local function DeliverStuff()
             else
                 drugDeliveryZone:destroy()
             end
+            Destination()
         end, function() -- Cancel
             ClearPedTasks(PlayerPedId())
         end)
     else
         TriggerServerEvent('qb-drugs:server:successDelivery', activeDelivery, false)
+        Destination()
     end
     deliveryTimeout = 0
 end
@@ -260,9 +272,17 @@ local function SetMapBlip(x, y)
     QBCore.Functions.Notify(Lang:t('success.route_has_been_set'), 'success');
 end
 
+local function OpenDealerShop()
+    local dealerName = Config.Dealers[currentDealer]["name"]
+    local dealerShop = 'Dealer_' .. string.gsub(dealerName, ' ', '_')
+    exports.ox_inventory:openInventory('shop', { type = dealerShop, id = 1 })
+end
+
 -- PolyZone specific functions
 
 function AwaitingInput()
+    if waitingKeyPress then return end
+
     CreateThread(function()
         waitingKeyPress = true
         while waitingKeyPress do
@@ -274,7 +294,7 @@ function AwaitingInput()
             elseif dealerIsHome then
                 if IsControlJustPressed(0, 38) then
                     GetClosestDealer()
-                    TriggerServerEvent('qb-drugs:server:dealerShop', currentDealer)
+                    OpenDealerShop() -- TriggerServerEvent('qb-drugs:server:dealerShop', currentDealer)
                     exports['qb-core']:KeyPressed()
                     waitingKeyPress = false
                 end
@@ -303,7 +323,7 @@ function InitZones()
                 heading = v.heading,
                 minZ = v.coords.z - 1,
                 maxZ = v.coords.z + 1,
-                debugPoly = false,
+                debugPoly = true,
             }, {
                 options = {
                     {
@@ -341,7 +361,7 @@ function InitZones()
                         label = Lang:t('info.target_openshop'),
                         action = function()
                             GetClosestDealer()
-                            TriggerServerEvent('qb-drugs:server:dealerShop', currentDealer)
+                            OpenDealerShop() -- TriggerServerEvent('qb-drugs:server:dealerShop', currentDealer)
                         end,
                         canInteract = function()
                             GetClosestDealer()
@@ -413,6 +433,8 @@ RegisterNetEvent('qb-drugs:client:setDealerItems', function(itemData, amount, de
 end)
 
 RegisterNetEvent('qb-drugs:client:setLocation', function(locationData)
+    print('set', locationData.coords)
+    Destination("Drug Dropoff", locationData.coords)
     if activeDelivery then
         SetMapBlip(activeDelivery['coords']['x'], activeDelivery['coords']['y'])
         QBCore.Functions.Notify(Lang:t('error.pending_delivery'), 'error')
@@ -480,19 +502,19 @@ end)
 
 RegisterNetEvent('qb-drugs:client:sendDeliveryMail', function(type, deliveryData)
     if type == 'perfect' then
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
+        TriggerServerEvent('phone:sendNewMail', {
             sender = Config.Dealers[deliveryData['dealer']]['name'],
             subject = 'Delivery',
             message = Lang:t('info.perfect_delivery', { dealerName = Config.Dealers[deliveryData['dealer']]['name'] })
         })
     elseif type == 'bad' then
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
+        TriggerServerEvent('phone:sendNewMail', {
             sender = Config.Dealers[deliveryData['dealer']]['name'],
             subject = 'Delivery',
             message = Lang:t('info.bad_delivery')
         })
     elseif type == 'late' then
-        TriggerServerEvent('qb-phone:server:sendNewMail', {
+        TriggerServerEvent('phone:sendNewMail', {
             sender = Config.Dealers[deliveryData['dealer']]['name'],
             subject = 'Delivery',
             message = Lang:t('info.late_delivery')

@@ -32,7 +32,7 @@ Config = {
         ['Rancho Dealer'] = {
             time = {min = 5, max = 23},
             name = "Dimebag Danny",
-            coords = {x = 362.18, y = -2029.42, z = 22.4},
+            coords = {x = 362.18, y = -2029.42, z = 22.0},
             products = {
             },
        },
@@ -145,23 +145,23 @@ Config = {
             min = 5,
             max = 10,
         },
-        ['weed_whitewidow'] = {
+        ['weed_purplehaze'] = {
             min = 10,
             max = 25,
         },
-        ['weed_ogkush'] = {
+        ['weed_whitewidow'] = {
             min = 15,
             max = 40,
         },
-        ['weed_purplehaze'] = {
+        ['weed_ogkush'] = {
             min = 18,
             max = 50,
         },
-        ['weed_amnesia'] = {
+        ['weed_ak47'] = {
             min = 40,
             max = 60,
         },
-        ['weed_ak47'] = {
+        ['weed_amnesia'] = {
             min = 60,
             max = 100,
         },
@@ -186,17 +186,18 @@ Config = {
     PoliceDeliveryModifier = 2, -- amount to multiply active cop count by
     WrongAmountFee = 2,         -- divide the payout by this value for wrong delivery amount
     OverdueDeliveryFee = 4,     -- divide the payout by this value for overdue delivery
+    DealerRepUpgrade = 50,  -- Rep needed to get distributor contact
 
     DeliveryItems = {
         [1] = {
             ['item'] = 'weed_brick',
             ['minrep'] = 0,
-            ['payout'] = 1000
+            ['payout'] = 250
         },
         [2] = {
             ['item'] = 'coke_brick',
-            ['minrep'] = 0,
-            ['payout'] = 1000
+            ['minrep'] = 40,
+            ['payout'] = 500
         },
     },
 
