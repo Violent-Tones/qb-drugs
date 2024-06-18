@@ -141,29 +141,35 @@ Config = {
     MinimumDrugSalePolice = 0,
 
     DrugsPrice = {
-        ['weed_skunk'] = {
+        ['Skunk'] = {
             min = 5,
             max = 10,
+            type = 'weed',
         },
-        ['weed_purplehaze'] = {
+        ['Purple Haze'] = {
             min = 10,
             max = 25,
+            type = 'weed',
         },
-        ['weed_whitewidow'] = {
+        ['White Widow'] = {
             min = 15,
             max = 40,
+            type = 'weed',
         },
-        ['weed_ogkush'] = {
+        ['OG Kush'] = {
             min = 18,
             max = 50,
+            type = 'weed',
         },
-        ['weed_ak47'] = {
+        ['AK47'] = {
             min = 40,
             max = 60,
+            type = 'weed',
         },
-        ['weed_amnesia'] = {
+        ['Amnesia'] = {
             min = 60,
             max = 100,
+            type = 'weed',
         },
         ['crack_baggy'] = {
             min = 70,
